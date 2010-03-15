@@ -1,6 +1,8 @@
 import pdb
 import sys
 
+import math
+
 def main(argv=None):
     """ XXXXXXXXXXXXXXXXXXXXX """
     roads = read_road("./roads_example1.txt")
@@ -36,11 +38,11 @@ def read_routes(file_path_routes, roads):
             routes[route_id] = {'n_cars':number_of_cars, 'road_ids':roads}
 
         return routes
-        
+
 def verify_routes(roads, routes):
     """
     Verify if the roads in the routes exist
-    
+
     roads -- 
     routes -- 
     """
@@ -48,6 +50,20 @@ def verify_routes(roads, routes):
         for road_id in route['road_ids']:
             if not road_id in roads:
                 print("Error")
+
+def calc_time_arrival(origin_x, origin_y, destiny_x, destiny_y, speed):
+    """
+        0 0
+        100 100
+        20
+    """
+    x_vect = destiny_x - origin_x
+    y_vect = destiny_y - origin_y
+
+    distance =  math.sqrt(math.pow(x_vect,2) + math.pow(y_vect,2))
+    time_arrival = distance / speed
+
+    return time_arrival
 
 if __name__ == '__main__':
     main(sys.argv[1:])
