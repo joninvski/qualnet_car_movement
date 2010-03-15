@@ -10,6 +10,8 @@ def main(argv=None):
 
     verify_routes(roads, routes)
 
+    calc_points(roads, routes)
+
     return 0        # success
 
 def read_road(file_path_roads):
@@ -20,7 +22,7 @@ def read_road(file_path_roads):
 
         for line in file:
             road_id, origin_x, origin_y, ending_x, ending_y, velocity = line.split()
-            roads[road_id] = [origin_x, origin_y, ending_y, velocity]
+            roads[road_id] = [origin_x, origin_y, ending_x, ending_y, velocity]
         return roads
 
 
@@ -49,7 +51,7 @@ def verify_routes(roads, routes):
     for route in routes.values():
         for road_id in route['road_ids']:
             if not road_id in roads:
-                print("Error")
+                prfloat("Error")
 
 def calc_time_arrival(origin_x, origin_y, destiny_x, destiny_y, speed):
     """
@@ -57,13 +59,29 @@ def calc_time_arrival(origin_x, origin_y, destiny_x, destiny_y, speed):
         100 100
         20
     """
-    x_vect = destiny_x - origin_x
-    y_vect = destiny_y - origin_y
+    x_vect = float(destiny_x) - float(origin_x)
+    y_vect = float(destiny_y) - float(origin_y)
 
     distance =  math.sqrt(math.pow(x_vect,2) + math.pow(y_vect,2))
-    time_arrival = distance / speed
+    time_arrival = distance / float(speed)
 
     return time_arrival
+
+def calc_points(roads, routes):
+
+    for route in routes.values():
+        time =  0
+
+        for road_id in route['road_ids']:
+            road = roads[road_id]
+            print_coordinate(0, road[0], road[1], time)
+            time = calc_time_arrival(*road)
+
+        last_point = roads[route['road_ids'][-1]]
+        print_coordinate(0, last_point[0], last_point[1], time)
+
+def print_coordinate(node, time, x, y):
+    print ("%d %ds (%f, %f, 0) 0 0" % (int(node), int(time), float(x), float(y)))
 
 if __name__ == '__main__':
     main(sys.argv[1:])
