@@ -51,19 +51,14 @@ def verify_routes(roads, routes):
     for route in routes.values():
         for road_id in route['road_ids']:
             if not road_id in roads:
-                prfloat("Error")
+                print("Error")
 
 def calc_time_arrival(origin_x, origin_y, destiny_x, destiny_y, speed):
-    """
-        0 0
-        100 100
-        20
-    """
     x_vect = float(destiny_x) - float(origin_x)
     y_vect = float(destiny_y) - float(origin_y)
 
     distance =  math.sqrt(math.pow(x_vect,2) + math.pow(y_vect,2))
-    time_arrival = distance / float(speed)
+    time_arrival = float(distance) / float(speed)
 
     return time_arrival
 
@@ -74,11 +69,11 @@ def calc_points(roads, routes):
 
         for road_id in route['road_ids']:
             road = roads[road_id]
-            print_coordinate(0, road[0], road[1], time)
+            print_coordinate(0, time, road[0], road[1])
             time = calc_time_arrival(*road)
 
         last_point = roads[route['road_ids'][-1]]
-        print_coordinate(0, last_point[0], last_point[1], time)
+        print_coordinate(0, time, last_point[2], last_point[3])
 
 def print_coordinate(node, time, x, y):
     print ("%d %ds (%f, %f, 0) 0 0" % (int(node), int(time), float(x), float(y)))
