@@ -3,6 +3,8 @@ import sys
 
 import math
 
+TOTAL_SIM_TIME = 500
+
 def main(argv=None):
     """ XXXXXXXXXXXXXXXXXXXXX """
     roads = read_road("./roads_example1.txt")
@@ -34,10 +36,14 @@ def read_routes(file_path_routes, roads):
 
         for line in file:
             line_splitted = line.split()
-            route_id, number_of_cars = line_splitted[0], line_splitted[1]
-            roads = line_splitted[2:]
 
-            routes[route_id] = {'n_cars':number_of_cars, 'road_ids':roads}
+            route_id, number_of_cars = line_splitted[0], line_splitted[1]
+            car_interval = line_splitted[2]
+            roads = line_splitted[3:]
+
+            routes[route_id] = {'n_cars':number_of_cars,
+                                'car_interval':car_interval,
+                                'road_ids':roads}
 
         return routes
 
@@ -66,14 +72,19 @@ def calc_points(roads, routes):
 
     for route in routes.values():
         time =  0
+        number_of_cars = int(route['n_cars'])
+        car_interval = int(route['car_interval'])
 
-        for road_id in route['road_ids']:
-            road = roads[road_id]
-            print_coordinate(0, time, road[0], road[1])
-            time = calc_time_arrival(*road)
+        for i in xrange(number_of_cars):
+            time = i * car_interval
 
-        last_point = roads[route['road_ids'][-1]]
-        print_coordinate(0, time, last_point[2], last_point[3])
+            for road_id in route['road_ids']:
+                road = roads[road_id]
+                print_coordinate(0, time, road[0], road[1])
+                time = time + calc_time_arrival(*road)
+
+            last_point = roads[route['road_ids'][-1]]
+            print_coordinate(0, time, last_point[2], last_point[3])
 
 def print_coordinate(node, time, x, y):
     print ("%d %ds (%f, %f, 0) 0 0" % (int(node), int(time), float(x), float(y)))
