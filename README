@@ -1,0 +1,15 @@
+
+
+There are two files for entering routes
+
+One for roads (./roads_example1.txt):
+
+    Format:
+        %d %d %d %d %d %d -----> (road_id, origin_x, origin_y, destiny_x, destiny_y, velocity)
+
+One for routes (./routes_example1.txt)
+
+    Format:
+        %d %d %d %d %d -----> (route_id, number_of_cars, interval_between_cars, routes*)
+
+*until the end of the line
